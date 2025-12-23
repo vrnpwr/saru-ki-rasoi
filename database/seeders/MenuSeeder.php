@@ -100,6 +100,7 @@ class MenuSeeder extends Seeder
                     'description' => $faker->paragraph(2),
                     'price' => $faker->randomFloat(2, 5, 30), // Price between 5 and 30
                     'image_path' => $imageUrl,
+                    'type' => $this->getFoodType($catData['slug'], $faker),
                 ]);
 
                 // Add variations for Pizza (Size, Crust) and Burgers (Extra Cheese) randomly
@@ -162,5 +163,16 @@ class MenuSeeder extends Seeder
             default:
                 return $faker->words(3, true);
         }
+    }
+
+    private function getFoodType($slug, $faker)
+    {
+        // Logic to determine probability of non-veg
+        if (in_array($slug, ['drinks', 'desserts', 'fries', 'salads', 'sides'])) {
+            return 'veg';
+        }
+
+        // For Burgers and Pizza, random mix
+        return $faker->randomElement(['veg', 'non-veg']);
     }
 }
